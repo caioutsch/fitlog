@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitLog — Registro e Acompanhamento de Treinos</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Cabeçalho e Identificação do Sistema -->
+  <header class="main-header">
+    <div class="logo-area">
+      <h1>FitLog</h1>
+      <p>Gestão Pessoal de Exercícios e Treinos</p>
+    </div>
+    
+    <!-- Navegação Principal -->
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#cadastro">Cadastrar Treino</a></li>
+        <li><a href="#listagem">Meus Exercícios</a></li>
+        <li><a href="#detalhes">Detalhes</a></li>
+        <li><a href="#catalogo-api">Consultar Exercícios (Wger/ExerciseDB)</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container layout-wrapper">
+    <!-- Conteúdo Principal -->
+    <main class="content-area">
+      
+      <!-- Seção: Formulário de Cadastro da Entidade Principal -->
+      <section id="cadastro" class="card">
+        <h2>Cadastrar Novo Exercício / Treino</h2>
+        <form action="#" method="POST" id="form-treino">
+          <div class="form-group">
+            <label for="nome-exercicio">Nome do Exercício *</label>
+            <input type="text" id="nome-exercicio" name="nomeExercicio" placeholder="Ex: Supino Reto com Barra" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="grupo-muscular">Grupo Muscular *</label>
+              <select id="grupo-muscular" name="grupoMuscular" required>
+                <option value="">Selecione...</option>
+                <option value="peito">Peito</option>
+                <option value="costas">Costas</option>
+                <option value="pernas">Pernas</option>
+                <option value="bracos">Braços</option>
+                <option value="ombros">Ombros</option>
+                <option value="abdomen">Abdômen</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="dia-semana">Dia da Semana *</label>
+              <select id="dia-semana" name="diaSemana" required>
+                <option value="">Selecione...</option>
+                <option value="segunda">Segunda-feira</option>
+                <option value="terca">Terça-feira</option>
+                <option value="quarta">Quarta-feira</option>
+                <option value="quinta">Quinta-feira</option>
+                <option value="sexta">Sexta-feira</option>
+                <option value="sabado">Sábado</option>
+                <option value="domingo">Domingo</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="series">Séries *</label>
+              <input type="number" id="series" name="series" min="1" max="20" placeholder="4" required>
+            </div>
+
+            <div class="form-group">
+              <label for="repeticoes">Repetições *</label>
+              <input type="number" id="repeticoes" name="repeticoes" min="1" max="100" placeholder="12" required>
+            </div>
+
+            <div class="form-group">
+              <label for="carga">Carga (kg) *</label>
+              <input type="number" id="carga" name="carga" step="0.5" min="0" placeholder="80" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="status-execucao">Status de Execução *</label>
+            <select id="status-execucao" name="statusExecucao" required>
+              <option value="pendente">Pendente</option>
+              <option value="concluido">Concluído</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="observacoes">Observações / Anotações</label>
+            <textarea id="observacoes" name="observacoes" rows="3" placeholder="Ajustar banco na altura 3..."></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Salvar Exercício</button>
+            <button type="reset" class="btn btn-secondary">Limpar Campos</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Seção: Pesquisa, Filtros e Ordenação -->
+      <section id="controles-busca" class="card">
+        <h2>Buscar e Filtrar Treinos</h2>
+        <form action="#" method="GET" class="filter-form">
+          <div class="form-row">
+            <div class="form-group flex-grow">
+              <label for="campo-pesquisa">Pesquisar por nome</label>
+              <input type="search" id="campo-pesquisa" name="busca" placeholder="Ex: Agachamento...">
+            </div>
+
+            <div class="form-group">
+              <label for="filtro-grupo">Filtrar por Grupo</label>
+              <select id="filtro-grupo" name="filtroGrupo">
+                <option value="todos">Todos os grupos</option>
+                <option value="peito">Peito</option>
+                <option value="costas">Costas</option>
+                <option value="pernas">Pernas</option>
+                <option value="bracos">Braços</option>
+                <option value="abdomen">Abdômen</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="ordem">Ordenar por</label>
+              <select id="ordem" name="ordem">
+                <option value="dia">Dia da Semana</option>
+                <option value="nome">Nome (A-Z)</option>
+                <option value="carga-desc">Maior Carga</option>
+                <option value="status">Status</option>
+              </select>
+            </div>
+
+            <div class="form-group form-btn-align">
+              <button type="button" class="btn btn-secondary">Aplicar</button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Seção: Visualização dos Itens Cadastrados (Tabela Dinâmica / Lista) -->
+      <section id="listagem" class="card">
+        <h2>Exercícios Registrados</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Exercício</th>
+                <th>Grupo</th>
+                <th>Dia</th>
+                <th>Séries x Reps</th>
+                <th>Carga</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Supino Reto com Barra</strong></td>
+                <td>Peito</td>
+                <td>Segunda-feira</td>
+                <td>4 x 10</td>
+                <td>80 kg</td>
+                <td><span class="badge badge-success">Concluído</span></td>
+                <td class="actions-cell">
+                  <button type="button" class="btn-icon" title="Ver Detalhes">👁️</button>
+                  <button type="button" class="btn-icon" title="Editar">✏️</button>
+                  <button type="button" class="btn-icon btn-danger" title="Excluir">🗑️</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Agachamento Livre</strong></td>
+                <td>Pernas</td>
+                <td>Terça-feira</td>
+                <td>4 x 12</td>
+                <td>100 kg</td>
+                <td><span class="badge badge-warning">Pendente</span></td>
+                <td class="actions-cell">
+                  <button type="button" class="btn-icon" title="Ver Detalhes">👁️</button>
+                  <button type="button" class="btn-icon" title="Editar">✏️</button>
+                  <button type="button" class="btn-icon btn-danger" title="Excluir">🗑️</button>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Puxada Alta Frontal</strong></td>
+                <td>Costas</td>
+                <td>Quarta-feira</td>
+                <td>3 x 12</td>
+                <td>55 kg</td>
+                <td><span class="badge badge-warning">Pendente</span></td>
+                <td class="actions-cell">
+                  <button type="button" class="btn-icon" title="Ver Detalhes">👁️</button>
+                  <button type="button" class="btn-icon" title="Editar">✏️</button>
+                  <button type="button" class="btn-icon btn-danger" title="Excluir">🗑️</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Seção: Visualização dos Detalhes de um Item (Modal / Detalhe) -->
+      <section id="detalhes" class="card">
+        <h2>Detalhes do Exercício Selecionado</h2>
+        <article class="detail-card">
+          <header class="detail-header">
+            <h3>Supino Reto com Barra</h3>
+            <span class="badge badge-success">Concluído</span>
+          </header>
+          
+          <div class="detail-content">
+            <div class="detail-info">
+              <p><strong>Grupo Muscular:</strong> Peito</p>
+              <p><strong>Dia Agendado:</strong> Segunda-feira</p>
+              <p><strong>Estrutura de Séries:</strong> 4 séries de 10 repetições</p>
+              <p><strong>Carga Atual:</strong> 80 kg</p>
+              <p><strong>Observações:</strong> Manter as escápulas aduzidas durante a execução. Intervalo de descanso: 90s.</p>
+            </div>
+            
+            <div class="detail-media">
+              <figure>
+                <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=400&q=80" alt="Demonstração do movimento de supino">
+                <figcaption>Ilustração / Guia de execução técnica</figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <footer class="detail-footer">
+            <button type="button" class="btn btn-secondary">Editar Exercício</button>
+            <button type="button" class="btn btn-danger">Excluir Exercício</button>
+          </footer>
+        </article>
+      </section>
+
+      <!-- Seção: Previsão de Integração com API Pública (Wger / ExerciseDB) -->
+      <section id="catalogo-api" class="card">
+        <h2>Consulta de Exercícios da Base Pública (Wger API)</h2>
+        <p>Área destinada à consulta de movimentações e ilustrações via API REST para auxílio na montagem de fichas.</p>
+        
+        <div class="api-grid">
+          <article class="api-item">
+            <h4>Bench Press (Supino)</h4>
+            <p><strong>Grupo:</strong> Chest / Peito</p>
+            <p><strong>Equipamento:</strong> Barbell (Barra)</p>
+            <button type="button" class="btn btn-small">Importar para meu treino</button>
+          </article>
+
+          <article class="api-item">
+            <h4>Squat (Agachamento)</h4>
+            <p><strong>Grupo:</strong> Legs / Pernas</p>
+            <p><strong>Equipamento:</strong> Barbell (Barra)</p>
+            <button type="button" class="btn btn-small">Importar para meu treino</button>
+          </article>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Barra Lateral Explicativa / Resumo -->
+    <aside class="sidebar">
+      <section class="card">
+        <h3>Resumo Semanal</h3>
+        <ul class="stats-list">
+          <li><strong>Exercícios Totais:</strong> 3</li>
+          <li><strong>Concluídos:</strong> 1</li>
+          <li><strong>Pendentes:</strong> 2</li>
+        </ul>
+      </section>
+
+      <section class="card">
+        <h3>Dicas de Treino</h3>
+        <p>Lembre-se de registrar o aumento de carga gradativamente para garantir a progressão de carga de forma segura.</p>
+      </section>
+    </aside>
+  </div>
+
+  <!-- Rodapé do Sistema -->
+  <footer class="main-footer">
+    <div class="container">
+      <p>&copy; 2026 FitLog — Sistema de Acompanhamento de Treinos. Projeto Acadêmico.</p>
+      <nav class="footer-nav">
+        <a href="#cadastro">Início</a> | 
+        <a href="https://wger.de/en/software/api" target="_blank" rel="noopener noreferrer">Documentação da API Wger</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
