@@ -1,15 +1,32 @@
-/* Reset Básico e Variáveis */
+/* ==========================================================================
+   FitLog — Etapa 2: CSS, Layout, Responsividade e Acessibilidade
+   ========================================================================== */
+
+/* 1. Variáveis de Design e Reset */
 :root {
   --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --bg-color: #f8fafc;
-  --card-bg: #ffffff;
-  --text-main: #0f172a;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
-  --success: #16a34a;
-  --warning: #ca8a04;
-  --danger: #dc2626;
+  --primary-hover: #1d4ed8;
+  --bg-main: #f8fafc;
+  --surface-card: #ffffff;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --border-color: #cbd5e1;
+  --focus-ring: #3b82f6;
+
+  /* Estados de Interação / Status */
+  --status-concluido-bg: #dcfce7;
+  --status-concluido-text: #14532d;
+  --status-pendente-bg: #fef9c3;
+  --status-pendente-text: #713f12;
+  --danger-bg: #fee2e2;
+  --danger-text: #991b1b;
+  --danger-hover: #fca5a5;
+
+  /* Tipografia e Sombras */
+  --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --transition: all 0.2s ease-in-out;
 }
 
 * {
@@ -19,89 +36,101 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-main);
-  line-height: 1.5;
+  font-family: var(--font-main);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 1.25rem;
 }
 
-/* Header */
+/* 2. Cabeçalho e Navegação (Flexbox) */
 .main-header {
-  background-color: var(--card-bg);
+  background-color: var(--surface-card);
   border-bottom: 1px solid var(--border-color);
-  padding: 1rem 2rem;
+  padding: 1.25rem 2rem;
+  box-shadow: var(--shadow-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  gap: 1rem;
 }
 
-.main-header h1 {
+.logo-area h1 {
   color: var(--primary);
   font-size: 1.8rem;
+  font-weight: 800;
 }
 
-.main-header p {
-  color: var(--text-muted);
-  font-size: 0.9rem;
+.logo-area p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
 }
 
 .main-nav ul {
   display: flex;
   list-style: none;
-  gap: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .main-nav a {
   text-decoration: none;
-  color: var(--text-main);
-  font-weight: 500;
-  transition: color 0.2s;
+  color: var(--text-primary);
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  transition: var(--transition);
 }
 
-.main-nav a:hover {
+.main-nav a:hover,
+.main-nav a:focus {
   color: var(--primary);
+  background-color: #eff6ff;
+  outline: 2px solid var(--focus-ring);
 }
 
-/* Layout Principal */
+/* 3. Estrutura Principal de Layout (CSS Grid) */
 .layout-wrapper {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 300px;
   gap: 1.5rem;
   margin-top: 2rem;
-  margin-bottom: 2rem;
-}
-
-@media (max-width: 850px) {
-  .layout-wrapper {
-    grid-template-columns: 1fr;
-  }
+  margin-bottom: 2.5rem;
+  flex: 1;
 }
 
 .card {
-  background: var(--card-bg);
+  background: var(--surface-card);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
 }
 
 .card h2, .card h3 {
-  margin-bottom: 1rem;
-  color: var(--text-main);
+  margin-bottom: 1.25rem;
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 0.5rem;
 }
 
-/* Formulários */
+/* 4. Formulários e Controles de Busca (Flexbox) */
 .form-group {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
+  margin-bottom: 1.15rem;
 }
 
 .form-group.flex-grow {
@@ -116,156 +145,229 @@ body {
 
 .form-row .form-group {
   flex: 1;
-  min-width: 140px;
+  min-width: 160px;
 }
 
 label {
   font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 0.25rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+  color: var(--text-primary);
 }
 
 input, select, textarea {
-  padding: 0.5rem 0.75rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
   font-size: 0.95rem;
+  font-family: inherit;
+  background-color: #ffffff;
+  transition: var(--transition);
 }
 
+/* Indicação visual de foco (Acessibilidade) */
 input:focus, select:focus, textarea:focus {
-  outline: 2px solid var(--primary);
+  outline: 3px solid var(--focus-ring);
+  border-color: var(--primary);
 }
 
 .form-actions {
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.25rem;
 }
 
 .form-btn-align {
-  justify-content: flex-end;
+  display: flex;
+  align-items: flex-end;
 }
 
-/* Botões e Badges */
+/* 5. Botões e Estados de Interação */
 .btn {
-  padding: 0.5rem 1rem;
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.65rem 1.25rem;
+  border: 1px solid transparent;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 0.95rem;
   cursor: pointer;
-  background-color: #e2e8f0;
-  color: var(--text-main);
+  transition: var(--transition);
+  text-decoration: none;
 }
 
 .btn-primary {
   background-color: var(--primary);
-  color: white;
+  color: #ffffff;
 }
 
-.btn-primary:hover {
-  background-color: var(--primary-dark);
+.btn-primary:hover, .btn-primary:focus {
+  background-color: var(--primary-hover);
+  outline: 2px solid var(--focus-ring);
 }
 
-.btn-secondary:hover {
-  background-color: #cbd5e1;
+.btn-secondary {
+  background-color: #f1f5f9;
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-secondary:hover, .btn-secondary:focus {
+  background-color: #e2e8f0;
+  outline: 2px solid var(--focus-ring);
 }
 
 .btn-danger {
-  background-color: #fee2e2;
-  color: var(--danger);
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+  border-color: #fca5a5;
+}
+
+.btn-danger:hover, .btn-danger:focus {
+  background-color: var(--danger-hover);
+  outline: 2px solid var(--danger-text);
 }
 
 .btn-small {
-  padding: 0.25rem 0.5rem;
+  padding: 0.35rem 0.75rem;
   font-size: 0.85rem;
 }
 
 .btn-icon {
-  background: none;
-  border: none;
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
   cursor: pointer;
-  font-size: 1.1rem;
-  padding: 0.2rem;
+  font-size: 1rem;
+  transition: var(--transition);
 }
 
+.btn-icon:hover, .btn-icon:focus {
+  background-color: #e2e8f0;
+  outline: 2px solid var(--focus-ring);
+}
+
+/* Badges de Status */
 .badge {
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
   font-size: 0.75rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-.badge-success { background: #dcfce7; color: var(--success); }
-.badge-warning { background: #fef9c3; color: var(--warning); }
+.badge-success {
+  background-color: var(--status-concluido-bg);
+  color: var(--status-concluido-text);
+}
 
-/* Tabela */
+.badge-warning {
+  background-color: var(--status-pendente-bg);
+  color: var(--status-pendente-text);
+}
+
+/* 6. Tabela Responsiva */
 .table-wrapper {
   overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  background-color: var(--surface-card);
 }
 
 th, td {
-  padding: 0.75rem;
+  padding: 0.85rem 1rem;
   border-bottom: 1px solid var(--border-color);
+  font-size: 0.925rem;
 }
 
 th {
+  background-color: #f8fafc;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+tbody tr:hover {
   background-color: #f1f5f9;
-  font-size: 0.85rem;
-  color: var(--text-muted);
 }
 
 .actions-cell {
-  white-space: nowrap;
+  display: flex;
+  gap: 0.35rem;
 }
 
-/* Detalhes e API */
+/* 7. Card de Detalhes e Catálogo da API (CSS Grid) */
+.detail-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  background-color: #fafafa;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
 .detail-content {
   display: grid;
-  grid-template-columns: 1fr 200px;
-  gap: 1rem;
-  margin: 1rem 0;
+  grid-template-columns: 1fr 220px;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
-@media (max-width: 600px) {
-  .detail-content { grid-template-columns: 1fr; }
+.detail-info p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
 
 .detail-media img {
   width: 100%;
+  height: auto;
   border-radius: 6px;
   object-fit: cover;
-}
-
-figcaption {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-align: center;
+  border: 1px solid var(--border-color);
 }
 
 .detail-footer {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 0.75rem;
+  border-top: 1px solid var(--border-color);
+  padding-top: 1rem;
 }
 
 .api-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
+  gap: 1.25rem;
   margin-top: 1rem;
 }
 
 .api-item {
   border: 1px solid var(--border-color);
-  padding: 1rem;
-  border-radius: 6px;
+  padding: 1.25rem;
+  border-radius: 8px;
+  background: var(--surface-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.api-item h4 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
 }
 
 .stats-list {
@@ -273,21 +375,84 @@ figcaption {
 }
 
 .stats-list li {
-  padding: 0.4rem 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
   border-bottom: 1px dashed var(--border-color);
+  font-size: 0.95rem;
 }
 
-/* Rodapé */
+/* 8. Rodapé */
 .main-footer {
-  background-color: var(--card-bg);
+  background-color: var(--surface-card);
   border-top: 1px solid var(--border-color);
   padding: 1.5rem 0;
+  margin-top: auto;
   text-align: center;
-  color: var(--text-muted);
   font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.footer-nav {
+  margin-top: 0.5rem;
 }
 
 .footer-nav a {
   color: var(--primary);
   text-decoration: none;
+}
+
+.footer-nav a:hover, .footer-nav a:focus {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   9. Responsividade e Breakpoints (Media Queries)
+   ========================================================================== */
+
+/* Breakpoint 1: Tablets e Telas Médias (Até 850px) */
+@media (max-width: 850px) {
+  .layout-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    order: 2;
+  }
+}
+
+/* Breakpoint 2: Celulares e Telas Pequenas (Até 600px) */
+@media (max-width: 600px) {
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .main-nav ul {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .main-nav a {
+    display: block;
+    width: 100%;
+  }
+
+  .detail-content {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
 }
